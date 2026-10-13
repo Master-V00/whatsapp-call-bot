@@ -102,18 +102,36 @@ sequenceDiagram
 | المواقيت | Aladhan API ‏(القاهرة) | حساب الصلوات |
 | اللوق | pino + ملف يومي | متابعة وتشخيص |
 
+### 📚 المكتبة المستخدمة
+
+المشروع مبني على **نسخة معدلة** من Baileys: [`@innovatorssoft/baileys`](https://github.com/innovatorssoft/Baileys) ‏(v7.4.9) — مضاف إليها نظام **VoIP كامل** (مكالمات صوت عبر WebRTC) غير موجود في النسخة الأصلية (WhiskeySockets). ملحوظة: مدة المكالمة في المكتبة تُحسب شاملة وقت الرن، لذلك البوت يضيف `RING_BUDGET_MS` تلقائيًا.
+
+النسخة المعدلة كبيرة (~282MB مع اعتمادياتها) لأنها مبنية لأغراض كثيرة لا يحتاجها البوت — سكريبت `prune.js` يمسح الأجزاء الزائدة من `node_modules` (مستندات واختبارات وملفات لا تعمل وقت التشغيل) لتقليل المساحة:
+
+```bash
+npm run prune -- --dry-run   # معاينة فقط
+npm run prune                # تنفيذ المسح
+```
+
 ### 🚀 التشغيل
 
 ```bash
-# 1. انسخ البيئة واملأها
+# 1. ثبّت الاعتماديات
+npm install
+pip install -r requirements.txt
+
+# 2. انسخ البيئة واملأها
 copy .env.example .env
 # PHONE_NUMBER=2010xxxxxxxx (بدون +) + ELEVENLABS_API_KEY (اختياري)
 
-# 2. شغّل (يثبت الناقص تلقائيًا)
+# 3. شغّل (يثبت أي ناقص تلقائيًا)
 npm start
 
-# 3. اربط من الموبايل: واتساب ← الأجهزة المرتبطة ← ربط برقم الهاتف
-# 4. اختبار الصوت: node index.js --test-tts "نص تجريبي"
+# 4. اربط من الموبايل: واتساب ← الأجهزة المرتبطة ← ربط برقم الهاتف
+# 5. اختبار الصوت: node index.js --test-tts "نص تجريبي"
+
+# تقليم الحزم لتوفير المساحة (معاينة أولًا):
+npm run prune -- --dry-run
 ```
 
 ### 📁 الهيكل
@@ -143,10 +161,6 @@ whatsapp-call-bot/
 | لا صوت | تأكد من FFmpeg و`audio.mp3` |
 | TTS فشل | يتحول لـ gTTS تلقائيًا (يحتاج بايثون) |
 | جلسة منتهية | امسح `auth/` وأعد الربط |
-
-### 🔒 الأمان
-
-`auth/` (جلسة الواتساب) و`.env` وقاعدة التذكيرات لا تُرفع أبدًا — كلها في `.gitignore`. المفتاح يعيش في متصفحك/جهازك فقط.
 
 </div>
 
@@ -223,18 +237,36 @@ sequenceDiagram
 | Times | Aladhan API (Cairo) | Prayer calculation |
 | Logging | pino + daily file | Monitoring |
 
+### 📚 Library Used
+
+The project runs on a **modified fork** of Baileys: [`@innovatorssoft/baileys`](https://github.com/innovatorssoft/Baileys) (v7.4.9) — with a full **VoIP system** (voice calls over WebRTC) that the original (WhiskeySockets) doesn't have. Note: the library counts call duration including ring time, so the bot adds `RING_BUDGET_MS` automatically.
+
+The modified fork is big (~282MB with dependencies) because it targets many uses the bot doesn't need — `prune.js` removes the excess parts of `node_modules` (docs, tests, non-runtime files) to save disk space:
+
+```bash
+npm run prune -- --dry-run   # preview only
+npm run prune                # actually delete
+```
+
 ### 🚀 Run
 
 ```bash
-# 1. Copy env and fill it
+# 1. Install dependencies
+npm install
+pip install -r requirements.txt
+
+# 2. Copy env and fill it
 copy .env.example .env
 # PHONE_NUMBER=2010xxxxxxxx (no +) + ELEVENLABS_API_KEY (optional)
 
-# 2. Start (auto-installs missing deps)
+# 3. Start (auto-installs anything missing)
 npm start
 
-# 3. Link from phone: WhatsApp → Linked Devices → Link with phone number
-# 4. Voice test: node index.js --test-tts "test text"
+# 4. Link from phone: WhatsApp → Linked Devices → Link with phone number
+# 5. Voice test: node index.js --test-tts "test text"
+
+# Trim packages to save disk space (preview first):
+npm run prune -- --dry-run
 ```
 
 ### 📁 Structure
@@ -264,10 +296,6 @@ whatsapp-call-bot/
 | No audio | Verify FFmpeg and `audio.mp3` |
 | TTS failed | Auto-falls-back to gTTS (needs Python) |
 | Dead session | Delete `auth/` and re-link |
-
-### 🔒 Security
-
-`auth/` (WhatsApp session), `.env` and the reminders database are never committed — all in `.gitignore`.
 
 ---
 
