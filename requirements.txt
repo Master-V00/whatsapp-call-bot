@@ -1,0 +1,2 @@
+# Python requirements for whatsapp-call-bot (auto-installed by ensure-deps.js on npm start)
+gtts>=2.5.0

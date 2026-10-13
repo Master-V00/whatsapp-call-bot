@@ -1,0 +1,25 @@
+# Secrets
+.env
+!.env.example
+auth/
+database/*.json
+
+# Logs
+logs/
+*.log
+
+# Deps
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Runtime cache
+tts/*.mp3
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
